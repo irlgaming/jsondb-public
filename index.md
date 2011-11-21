@@ -2,7 +2,7 @@
 
 ## Description
 
-JSONDB is a module that allows you create, query and store collections of Javascript objects in your iOS and Android applications. All data managed by JSONDB is secured from tampering
+JSONDB is a module that allows you create, query and store collections of Javascript objects in your iOS applications. All data managed by JSONDB is secured from tampering
 once committed to storage. JSONDB provides an advanced NoSQL query interface allowing traversal, retrieval, mutation and sorting of objects within collections.
 
 The module also provides an implementation of DBRef allowing references to objects between collections, include automated resolution of linkages.
