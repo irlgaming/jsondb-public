@@ -64,16 +64,18 @@ I'm not familiar with using iTunes file sharing to perform backups, but if you'r
 
 NoSQL databases really have no structure or schema, you can put objects of any structure into the same collection and perform queries on them in the same way. Rather than me attempting an explanation on how schema-less databases work it's probably better if I provide some articles on the subject:
 
-http://en.wikipedia.org/wiki/NoSQL
-http://www.mongodb.org/display/DOCS/Schema+Design
-http://blog.mongodb.org/post/119945109/why-schemaless
-http://effectif.com/mongodb/mongodb-schema-design
+* http://en.wikipedia.org/wiki/NoSQL
+* http://www.mongodb.org/display/DOCS/Schema+Design
+* http://blog.mongodb.org/post/119945109/why-schemaless
+* http://effectif.com/mongodb/mongodb-schema-design
 
 The simple answer is: you don't need to change your DB structure between updates because there is no schema. You can store and retrieve data of any type in any way you like - adding new attributes is as easy as just setting a property on an object. So, for example, if you wanted to add a property called "foo" to each object in a collection named "objects" you would use code similar to the following:
 
+``` javascript
 var collection = jsondb.factory("objects", "mysharedsecret");
 collection.update({}, {$set:{foo:"bar"}}, {}, true);
 collection.commit();
+```
 
 ## What algorithm does JSONDB use to determine geo-spatial proximity?
 
@@ -85,8 +87,10 @@ The JSONDB module uses Ti.Filesystem to store and retrieve data. What I think is
 
 At the beginning of your app.js file try adding the following two lines:
 
+``` javascript
 Ti.API.info(Ti.Utils.sha1("testing"));
 Ti.API.info(Ti.Filesystem.applicationDataDirectory);
+```
 
 That should force Titanium to resolve the required symbols before they're referenced in the JSONDB library.
 
