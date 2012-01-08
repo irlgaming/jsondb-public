@@ -94,6 +94,18 @@ Ti.API.info(Ti.Filesystem.applicationDataDirectory);
 
 That should force Titanium to resolve the required symbols before they're referenced in the JSONDB library.
 
+## Can JSONDB handle large datasets (4000+ records)?
+
+Yup, although your mileage may vary. How JSONDB will perform under these conditions will depend on the way you organize your data, the complexity of the queries you perform, the family of device running the code and just how much data you have in your collections.
+
+I've tested with collections containing up to 20,000 records, and on my 3Gs test device I've seen query times off around 833 milliseconds for integer keys (e.g. collection.count({i:3})) and around 1.4 seconds for regular expression based fuzzy searches (e.g. collection.count({term:/^[af]/})). That's not blazingly fast, but then again this is a fairly extreme use case for the module.
+
+You can test the code yourself in the simulator and on your devices if you have a copy of the JSONDB module, or just examine my test rationale:
+
+https://github.com/dan-eyles/jsondb-public/blob/master/app2.js
+
+Since JSONDB caches all collection data in memory at runtime you might run into memory starvation issues if your collections are exceptionally large.
+
 ## I'm getting weird errors about a missing armv6 slice!
 
 Grab the latest version of the module from the Open Marketplace and it should fix this issue.
