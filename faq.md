@@ -1,4 +1,4 @@
-# JSONDB FAQ
+JSONDB FAQ
 
 ## Description
 
@@ -16,7 +16,7 @@ As soon as Appcelerator close the above ticket I'll release an Android version o
 
 Documentation and an example application showing practical examples of the module in action are available at the following URL:
 
-https://github.com/dan-eyles/jsondb-public
+https://github.com/irlgaming/jsondb-public
 
 ## Can I migrate my application from SQLite to JSONDB?
 
@@ -102,7 +102,7 @@ I've tested with collections containing up to 20,000 records, and on my 3Gs test
 
 You can test the code yourself in the simulator and on your devices if you have a copy of the JSONDB module, or just examine my test rationale:
 
-https://github.com/dan-eyles/jsondb-public/blob/master/app2.js
+https://github.com/irlgaming/jsondb-public/blob/master/app2.js
 
 Since JSONDB caches all collection data in memory at runtime you might run into memory starvation issues if your collections are exceptionally large.
 
@@ -113,6 +113,17 @@ Grab the latest version of the module from the Open Marketplace and it should fi
 ## Can I have the JSONDB source code?
 
 Starting with v2.0 of the module we'll be distributing the source to licensed users.
+
+## Isn't JSONDB pretty much the same as TaffyDB?
+
+Nope, we didn't even known TaffyDB existed until someone tweeted about it. You can find the project here:
+
+http://taffydb.com/
+https://github.com/typicaljoe/taffydb
+
+There are some fairly significant differences between TaffyDB and JSONDB - the most important  being that JSONDB was engineered for use in Titanium Applications (rather than the web) that leverage MongoDB on the server side. We haven't tried integrating TaffyDB with our Appcelerator apps, but there's a project on Github doing just that, you can find it at the following location:
+
+https://github.com/mpociot/ti-taffy
 
 ## Author
 
