@@ -118,8 +118,8 @@ Starting with v2.0 of the module we'll be distributing the source to licensed us
 
 Nope, we didn't even known TaffyDB existed until someone tweeted about it. You can find the project here:
 
-http://taffydb.com/
-https://github.com/typicaljoe/taffydb
+* http://taffydb.com/
+* https://github.com/typicaljoe/taffydb
 
 There are some fairly significant differences between TaffyDB and JSONDB - the most important  being that JSONDB was engineered for use in Titanium Applications (rather than the web) that leverage MongoDB on the server side. We haven't tried integrating TaffyDB with our Appcelerator apps, but there's a project on Github doing just that, you can find it at the following location:
 
