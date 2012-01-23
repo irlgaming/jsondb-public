@@ -34,7 +34,11 @@ http://developer.appcelerator.com/blog/2010/08/execution-contexts.html
 
 ## Are you planning on providing support for use in multiple execution contexts?
 
-Yup, this is on the road map and experimental support is already in place for the next version of the module.
+We looked at implementing this, but every design we came up with seemed like an anti-pattern. The short answer is: no.
+
+The long answer is: no.
+
+JSONDB is designed for use in single execution context applications.
 
 ## What's the performance like? Have you done any comparative benchmarks with SQLite?
 
@@ -43,6 +47,10 @@ I haven't done any comparative benchmarks between SQLite and JSONDB, so I can't 
 I've done a bit of performance testing on JSONDB and the number of queries per second you'll be able to squeeze out of it is a function of the complexity of your query expressions, the sorting algorithm used and (most importantly) the size of the collection you're working with. Using collections of less than 300 objects I've observed the module perform up to 500 moderately complex queries employing various sorts in under a second (around 0.7 seconds). The larger the collection the slower the query; I've tested with collections containing up to 1000 records and the system still performs adequately on my 3Gs test device (the same test taking between 1.2 and 1.7 seconds).
 
 If your application requires more performance than that then I'd be very interested in finding out about what you're working on ;-)
+
+## Does JSONDB support indexes?
+
+Yup, JSONDB supports B-tree style indexes. This subject is explained at length in the JSONDBIndex.md document.
 
 ## How is data stored in JSONDB?
 
@@ -59,6 +67,10 @@ Joins (and foreign key constraints) aren't actually supported in NoSQL systems, 
 ## Can I use iTunes file sharing to perform backups and restores?
 
 I'm not familiar with using iTunes file sharing to perform backups, but if you're just backing up your SQLite database files to online storage then there's no reason you can't also do that with JSONDB files. To restore you'd download the collection files to the original location and everything would auto-magically work. We currently replicate our collections from user's handsets to a remote MongoDB replica set in production.
+
+## Can I connect JSONDB to the MongoLab REST API?
+
+Yes, you can. This subject is documented at length in the mongolab.md document.
 
 ## How do I change my schema or migrate data between releases?
 
@@ -112,7 +124,21 @@ Grab the latest version of the module from the Open Marketplace and it should fi
 
 ## Can I have the JSONDB source code?
 
-Starting with v2.0 of the module we'll be distributing the source to licensed users.
+Starting with v2.0 of the module we'll be distributing the source to licensed users (on request).
+
+## Why are you charging $15 USD for JSONDB? Are there any coupon codes?
+
+When you buy a license to the JSONDB module what you're really buying is exclusive access to the top of our email queue. If you've got a JSONDB related issue you can email us any time and we'll get back to as soon as possible.
+
+We work really hard to develop, maintain and support this module but we also need to pay our bills - so we don't think 15 lousy clams is all that much to ask for an unlimited license with no seating restrictions and unlimted support (within reason).
+
+JSONDB is closed source (although we provide the module source to license holders on request) and we do not provide discount coupons on the Appcelerator Open Marketplace.
+
+## If I buy a license can I extend JSONDB and redistribute the source under a different license?
+
+Nope. If you find bugs in the JSONDB source or want a particular feature please log a ticket at http://support.irlgaming.com/home and we'll address them. Don't worry, we'll take your ticket seriously and roll out a fix as soon as humanly possible.
+
+If you're having trouble getting a response email ohlo@irlgaming.com and it'll make somebody's phone beep.
 
 ## Isn't JSONDB pretty much the same as TaffyDB?
 

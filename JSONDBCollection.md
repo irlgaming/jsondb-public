@@ -4,6 +4,17 @@
 
 A JSONDB collection object
 
+## Properties
+
+### API
+
+The API property holds a pointer to the MongoLab REST API connector for the collection (if it has been initialized). The connector object has two functions:
+
+* load: loads data from the MongoLab REST API
+* save: saves data back to the MongoLab REST API
+
+The implementation details for the MongoLab REST API connector are provided in the mongolab.md document.
+
 ## Functions
 
 Following is a reference for the JSONDBCollection class. A comprehensive set of working examples can be found in the sample application distributed with this module.
@@ -40,6 +51,72 @@ Returns the length of the collection as an integer value
 #### Properties
 
 None
+
+#### Exceptions
+
+None
+
+### getLastInsertId
+
+Returns the ObjectID for the last object inserted into the collection
+
+#### Properties
+
+None
+
+#### Exceptions
+
+None
+
+### initializeAPI(host[string], key[string], query[object])
+
+Initializes the MongoLab API connector for the collection. This allows you to load documents from a MongoDB collection hosted by MongoLab, the API connector also allows your application to synchronize changes back to the MongoDB collection hosted by MongoLab.
+
+#### Properties
+
+* host[string, optional]: a string specifying the API host to connect to, by default this is set to api.mongolab.com
+* key[string, required]: your MongoLab API key
+* query[object, optional]: a query expression object used to filter which objects are returned by the MongoDB collection
+
+#### Exceptions
+
+None
+
+### ensureIndex(definition[object])
+
+Creates a B-tree index on the JSONDB collection using the definition provided. Definition objects are represented by a series of key, value pairs with the key representing the object attribute to index and value representing the intended sort order. And example of the usage of this function might be:
+
+``` javascript
+var collection = jsondb.factory('documents', 'yoursecretkey');
+collection.save({
+	x: 2,
+	y: 3	
+});
+collection.ensureIndex({x:-1, y:1});
+```
+
+This block of code would create an index on the "documents" collection, indexing "x" in descending order and "y" in ascending order. More documentation on indexes can be found in the JSONDBIndex document.
+
+#### properties
+
+* definition[object, required]: the index definition
+
+#### Exceptions
+
+None
+
+### dropIndex(definition[object])
+
+Drops a B-tree index from the JSONDB collection using the definition provided. Definition objects are represented by a series of key, value pairs with the key representing the object attribute to index and value representing the intended sort order. And example of the usage of this function might be:
+
+``` javascript
+var collection = jsondb.factory('documents', 'yoursecretkey');
+collection.dropIndex({x:-1, y:1});
+```
+
+#### Properties
+
+* definition[object, required]: the index definition
 
 #### Exceptions
 
@@ -162,6 +239,10 @@ Supported expressions within the query object are as follows:
    * var o = collection.find({i:{$eq:5}});
    * var o = collection.find({i:5});
    * var o = collection.find({name:/^a+/});
+
+* $ne: compares the object value for inequivalence (whether or not the objects are not equal to one another)
+   * var o = collection.find({i:{$ne:3}});
+   * var o = collection.find({name:/^b+/})
 
 * $lte: compares the object value to see if it is less than or equal to the provided value
    * var o = collection.find({i:{$lte:5}});
