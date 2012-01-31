@@ -12,7 +12,7 @@ http://en.wikipedia.org/wiki/B-tree
 
 B-tree indexes in the context of JSONDB have no block size limitation and are stored entirely in memory. In fact, indexes are never stored on disk and are rebuilt every time a collection is loaded into memory.
 
-This also means you'll need to define your indexes every time you bootstrap your JSONDB collections, which is simply of a matter of adding a few lines of code. For example:
+This also means you'll need to define your indexes every time you bootstrap your JSONDB collections, which is simply a matter of adding a few lines of code. For example:
 
 ``` javascript
 var global = {

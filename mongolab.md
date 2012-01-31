@@ -65,7 +65,7 @@ collection.API.load();
 
 The code above will only load in objects from the collection with an user_id attribute with a value of "123456789". This might be useful if you want to store all user specific data in a single collection but only load in objects pertinent to the current user.
 
-Once the data is loaded from the API the JSONDB module will fire a "JSONDBDownloadSuccess" event which your application will be able to trap. Once this event has been fired you've able to work with the data stored inside your collections. In the event of an error the JSONDB module will fire a "JSONDBDownloadSuccess" event.
+Once the data is loaded from the API the JSONDB module will fire a "JSONDBDownloadSuccess" event which your application will be able to trap. Once this event has been fired you're able to work with the data stored inside your collections. In the event of an error the JSONDB module will fire a "JSONDBDownloadSuccess" event.
 
 Synchronizing data back to MongoDB is simple:
 
@@ -88,7 +88,7 @@ var globals = {
 	loaded: {}
 };
 
-Ti.App.addEventListener("dataTampered", function(event) { Ti.API.info(event); });
+Ti.App.addEventListener("JSONDBDataTampered", function(event) { Ti.API.info(event); });
 
 Ti.App.addEventListener("JSONDBDownloadSuccess", function(event) {
 	globals.collections[event.collection_name].ensureIndex({x:-1}); // create an index on your newly loaded collection 

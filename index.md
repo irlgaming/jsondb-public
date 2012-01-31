@@ -25,12 +25,19 @@ Following is a reference for the JSONDB API. A comprehensive set of working exam
 
 The debug function allows calling agents to specify whether or not query debug output should be emitted to the Titanium console. The value passed to this function should boolean, the default is false.
 
-### jsondb.factory(name[string], secret[string])
+### jsondb.storageLocation(path[string])
+
+Sets the module wide storage location for JSONDB collection data, this setting can over-ridden at the collection level. By default this is set to Titanium.Filesystem.applicationDataDirectory
+
+See http://developer.apple.com/icloud/documentation/data-storage/ for implementation details on where to store you application data.
+
+### jsondb.factory(name[string], secret[string], path[string])
 
 This function factories a JSONDB collection object. If a stored version of the collection currently resides on disk it will automatically be loaded, otherwise a file will be created.
 
 * name[string, required]: the name of the collection to instantiate
 * secret[string, required]: the shared secret used to secure data on disk
+* path[string, optional]: the file system location used to store collection data. If not specified this falls back to the global setting for the module, default is Titanium.Filesystem.applicationDataDirectory at the module level.
 
 ## Usage
 
@@ -38,7 +45,7 @@ This function factories a JSONDB collection object. If a stored version of the c
 
 ## Exceptions
 
-If the signature stored with the data does not match the signature calculated when the collection is loaded the module with return a boolean value of FALSE and fire a dataTampered event.
+If the signature stored with the data does not match the signature calculated when the collection is loaded the module with return a boolean value of FALSE and fire a JSONDBDataTampered event.
 The implementing application is then able to handle this event internally (e.g. display a message to the user telling them that application data has been tampered with).
 
 ### jsondb.factoryDBref(collection[string], id[string])

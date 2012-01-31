@@ -29,7 +29,7 @@ None
 
 #### Exceptions
 
-If the signature stored with the data does not match the signature calculated when the collection is loaded the module with return a boolean value of FALSE and fire a dataTampered event.
+If the signature stored with the data does not match the signature calculated when the collection is loaded the module with return a boolean value of FALSE and fire a JSONDBDataTampered event.
 The implementing application is then able to handle this event internally (e.g. display a message to the user telling them that application data has been tampered with).
 
 ### setAutoCommit(flag[boolean])
@@ -56,7 +56,7 @@ None
 
 None
 
-### getLastInsertId
+### getLastInsertId()
 
 Returns the ObjectID for the last object inserted into the collection
 
@@ -302,6 +302,23 @@ Same as the find function (minus the conditions object), however rather than ret
 	var c = collection.count({i:10, j:2, name:/chicken/}); // count objects where i equals 10, j equals 20 and name matches the provided regular expression
 	
 #### Exceptions
+
+None
+
+### distinct(key[string], query[object])
+
+Aggregates all distinct values for a given key within the collection. If a query is provided the collection will use it to filter the objects used in the aggregration loop.
+
+#### Properties
+
+* key[string, required]: the key to aggregate distinct values for
+* query[object, optional]: see the "find" function
+
+#### Usage
+
+	var d = collection.distinct("name", {i:{$lte:100}}); // get all the distinct values of "name" where i is less than or equal to 100
+
+### Exceptions
 
 None
 

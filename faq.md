@@ -34,11 +34,7 @@ http://developer.appcelerator.com/blog/2010/08/execution-contexts.html
 
 ## Are you planning on providing support for use in multiple execution contexts?
 
-We looked at implementing this, but every design we came up with seemed like an anti-pattern. The short answer is: no.
-
-The long answer is: no.
-
-JSONDB is designed for use in single execution context applications.
+We looked at implementing this, but every design we came up with seemed like an anti-pattern. JSONDB is designed for use in single execution context applications.
 
 ## What's the performance like? Have you done any comparative benchmarks with SQLite?
 
@@ -52,9 +48,15 @@ If your application requires more performance than that then I'd be very interes
 
 Yup, JSONDB supports B-tree style indexes. This subject is explained at length in the JSONDBIndex.md document.
 
+## What happened to the dataTampered event?!
+
+This event is now named "JSONDBDataTampered" to maintain consistency with other events fired by the JSONDB module and ensure it doesn't collide with events inside your app (or from other modules).
+
 ## How is data stored in JSONDB?
 
 Each collection is stored on disk as a single file, you can think of it as semantically equivalent to a database table although there are some significant differences. Collections represent a group of objects rather than rows.
+
+Starting with version 2.0 of the module you're also able to tell JSONDB where on disk you'd like your collection data stored.
 
 ## What's the difference between save() and commit()?
 
@@ -130,13 +132,13 @@ Starting with v2.0 of the module we'll be distributing the source to licensed us
 
 When you buy a license to the JSONDB module what you're really buying is exclusive access to the top of our email queue. If you've got a JSONDB related issue you can email us any time and we'll get back to as soon as possible.
 
-We work really hard to develop, maintain and support this module but we also need to pay our bills - so we don't think 15 lousy clams is all that much to ask for an unlimited license with no seating restrictions and unlimted support (within reason).
+We work really hard to develop, maintain and support this module but we also need to pay our bills - so we don't think fifteen clams is all that much to ask for an unlimited license with no seating restrictions and unlimited support (within reason).
 
 JSONDB is closed source (although we provide the module source to license holders on request) and we do not provide discount coupons on the Appcelerator Open Marketplace.
 
 ## If I buy a license can I extend JSONDB and redistribute the source under a different license?
 
-Nope. If you find bugs in the JSONDB source or want a particular feature please log a ticket at http://support.irlgaming.com/home and we'll address them. Don't worry, we'll take your ticket seriously and roll out a fix as soon as humanly possible.
+Nope. If you find bugs in the JSONDB source or want a particular feature please log a ticket at http://support.irlgaming.com/home and we'll address it. Don't worry, we'll take your ticket seriously and roll out a fix as soon as humanly possible.
 
 If you're having trouble getting a response email ohlo@irlgaming.com and it'll make somebody's phone beep.
 
