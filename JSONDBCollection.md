@@ -242,7 +242,6 @@ Supported expressions within the query object are as follows:
 
 * $ne: compares the object value for inequivalence (whether or not the objects are not equal to one another)
    * var o = collection.find({i:{$ne:3}});
-   * var o = collection.find({name:/^b+/})
 
 * $lte: compares the object value to see if it is less than or equal to the provided value
    * var o = collection.find({i:{$lte:5}});
@@ -264,6 +263,9 @@ Supported expressions within the query object are as follows:
 
 * $in: evaluates whether not the object property has a value in the provided array
    * var o = collection.find({i:{$in:[1, 2, 3, 4, 5]}});
+
+* $nin: evaluates whether not the object property has a value that is not in the provided array
+   * var o = collection.find({i:{$nin:[1, 2, 3, 4, 5]}});
 
 * $within: evaluates whether or not objects fall within a given geo-spatial area defined by a center-point and radius. To take advantage of this feature your object property must be an object with "lat" and "lng" properties.
    * var o = collection.find({loc:{$within:[[5, 5], 0.9]}});
