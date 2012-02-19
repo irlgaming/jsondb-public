@@ -13,7 +13,7 @@ It should be noted that the collection objects within this module are not thread
 
 To access this module from JavaScript, you would do the following:
 
-	var jsondb = require("com.irlgaming.JSONDB");
+	var jsondb = require("com.irlgaming.jsondb");
 
 The JSONDB variable is a reference to the Module object.	
 
