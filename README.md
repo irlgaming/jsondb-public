@@ -1,4 +1,4 @@
-# jsondb Module
+# JSONDB Module
 
 ## Description
 
@@ -9,13 +9,13 @@ The module also provides an implementation of DBRef allowing references to objec
 
 It should be noted that the collection objects within this module are not thread safe and should only be accessed within a single memory context.
 
-## Accessing the jsondb Module
+## Accessing the JSONDB Module
 
 To access this module from JavaScript, you would do the following:
 
-	var jsondb = require("com.irlgaming.jsondb");
+	var jsondb = require("com.irlgaming.JSONDB");
 
-The jsondb variable is a reference to the Module object.	
+The JSONDB variable is a reference to the Module object.	
 
 ## Reference
 
