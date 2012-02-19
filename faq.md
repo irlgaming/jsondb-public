@@ -126,21 +126,19 @@ Grab the latest version of the module from the Open Marketplace and it should fi
 
 ## Can I have the JSONDB source code?
 
-Starting with v2.0 of the module we'll be distributing the source to licensed users (on request).
+Yup, JSONDB has been released under GPL v3. See the LICENSE document in this repository for details on the terms and conditions associated with this license.
 
 ## Why are you charging $15 USD for JSONDB? Are there any coupon codes?
 
-When you buy a license to the JSONDB module what you're really buying is exclusive access to the top of our email queue. If you've got a JSONDB related issue you can email us any time and we'll get back to as soon as possible.
+We work really hard to develop, maintain and support this module but we also need to pay our bills - so we don't think fifteen clams is all that much to ask for a commercial license with no seating restrictions and unlimited support (within reason).
 
-We work really hard to develop, maintain and support this module but we also need to pay our bills - so we don't think fifteen clams is all that much to ask for an unlimited license with no seating restrictions and unlimited support (within reason).
+JSONDB is released under GPL v3 for free, open source projects and includes a dual license for purchase in the Appcelerator Open Marketplace for use in commercial applications.
 
-JSONDB is closed source (although we provide the module source to license holders on request) and we do not provide discount coupons on the Appcelerator Open Marketplace.
+We do not provide discount coupons on the Appcelerator Open Marketplace.
 
-## If I buy a license can I extend JSONDB and redistribute the source under a different license?
+## Can I extend JSONDB and redistribute the source under a different license?
 
-Nope. If you find bugs in the JSONDB source or want a particular feature please log a ticket at http://support.irlgaming.com/home and we'll address it. Don't worry, we'll take your ticket seriously and roll out a fix as soon as humanly possible.
-
-If you're having trouble getting a response email ohlo@irlgaming.com and it'll make somebody's phone beep.
+See the LICENSE document included in this repository.
 
 ## Isn't JSONDB pretty much the same as TaffyDB?
 
@@ -155,7 +153,7 @@ https://github.com/mpociot/ti-taffy
 
 ## Author
 
-Daniel Eyles, IRL Gaming
+Dan Eyles, IRL Gaming
 dan@irlgaming.net
 
 ## License
