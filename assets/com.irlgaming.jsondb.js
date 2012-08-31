@@ -22,7 +22,7 @@
 /**
  * Global module name space
  */
-var exports = {
+module.exports = {
 	JSONDB: {
 		classes: {},
 		objects: {},
@@ -36,44 +36,44 @@ var exports = {
  * Global variables
  */
 // flag specifying whether or not to log debug output to the console
-exports.JSONDB.variables.debug = false;
+module.exports.JSONDB.variables.debug = false;
 
 // the variables below are used for string comparison operations
-exports.JSONDB.variables.$eq = "$eq";
-exports.JSONDB.variables.$ne = "$ne";
-exports.JSONDB.variables.$exists = "$exists";
-exports.JSONDB.variables.$size = "$size";
-exports.JSONDB.variables.$within = "$within";
-exports.JSONDB.variables.$gt = "$gt";
-exports.JSONDB.variables.$gte = "$gte";
-exports.JSONDB.variables.$lt = "$lt";
-exports.JSONDB.variables.$lte = "$lte";
-exports.JSONDB.variables.$in = "$in";
-exports.JSONDB.variables.$in = "$nin";
-exports.JSONDB.variables.$or = "$or";
-exports.JSONDB.variables.$sort = "$sort";
-exports.JSONDB.variables.$unset = "$unset";
-exports.JSONDB.variables.$inc = "$inc";
-exports.JSONDB.variables.$set = "$set";
+module.exports.JSONDB.variables.$eq = "$eq";
+module.exports.JSONDB.variables.$ne = "$ne";
+module.exports.JSONDB.variables.$exists = "$exists";
+module.exports.JSONDB.variables.$size = "$size";
+module.exports.JSONDB.variables.$within = "$within";
+module.exports.JSONDB.variables.$gt = "$gt";
+module.exports.JSONDB.variables.$gte = "$gte";
+module.exports.JSONDB.variables.$lt = "$lt";
+module.exports.JSONDB.variables.$lte = "$lte";
+module.exports.JSONDB.variables.$in = "$in";
+module.exports.JSONDB.variables.$in = "$nin";
+module.exports.JSONDB.variables.$or = "$or";
+module.exports.JSONDB.variables.$sort = "$sort";
+module.exports.JSONDB.variables.$unset = "$unset";
+module.exports.JSONDB.variables.$inc = "$inc";
+module.exports.JSONDB.variables.$set = "$set";
 
 // a cache used to store traversal information for objects between inner loop iterations
-exports.JSONDB.variables.tcache = {};
+module.exports.JSONDB.variables.tcache = {};
 
 /**
  * Global constants
  */
-exports.JSONDB.constants.INDEX_TYPE_B_TREE = 0;
-exports.JSONDB.constants.INDEX_TYPE_UNIQUE = 1;
-exports.JSONDB.constants.DEFAULT_API_HOST = 'api.mongolab.com';
-exports.JSONDB.constants.DEFAULT_FS_DIR = Titanium.Filesystem.applicationDataDirectory;
-exports.JSONDB.constants.ID_FIELD = '$id';
-exports.JSONDB.constants.REF_FIELD = '$ref';
+module.exports.JSONDB.constants.INDEX_TYPE_B_TREE = 0;
+module.exports.JSONDB.constants.INDEX_TYPE_UNIQUE = 1;
+module.exports.JSONDB.constants.DEFAULT_API_HOST = 'api.mongolab.com';
+module.exports.JSONDB.constants.DEFAULT_FS_DIR = Titanium.Filesystem.applicationDataDirectory;
+module.exports.JSONDB.constants.ID_FIELD = '$id';
+module.exports.JSONDB.constants.REF_FIELD = '$ref';
 
 /**
  * the JSONDB database interface class
  * @constructor
  */
-exports.JSONDB.classes.Database = function() {
+module.exports.JSONDB.classes.Database = function() {
 
 	this._collections = {};	
 	
@@ -89,7 +89,7 @@ exports.JSONDB.classes.Database = function() {
 		if(name in this._collections) {
 			return this._collections[name].c;
 		}
-		var collection = new exports.JSONDB.classes.Collection(name, secret, path, override);
+		var collection = new module.exports.JSONDB.classes.Collection(name, secret, path, override);
 		collection.open();
 		this._collections[name] = {
 			c:collection,
@@ -108,10 +108,10 @@ exports.JSONDB.classes.Database = function() {
  * @param key the API access key to use when performing HTTP requests
  * @param query the query object to use when loading objects from the MongoDB collection
  */
-exports.JSONDB.classes.MongoRESTManager = function(name, host, key, query) {
+module.exports.JSONDB.classes.MongoRESTManager = function(name, host, key, query) {
 
 	if(host == undefined) {
-		host = exports.JSONDB.constants.DEFAULT_API_HOST;
+		host = module.exports.JSONDB.constants.DEFAULT_API_HOST;
 	}
 	
 	this._name = name;
@@ -200,7 +200,7 @@ exports.JSONDB.classes.MongoRESTManager = function(name, host, key, query) {
 		var o = [];
 		var obj = null;
 		for(var k in collection._objects) {
-			obj = exports.JSONDB.functions.cloneObject(collection._objects[k]);
+			obj = module.exports.JSONDB.functions.cloneObject(collection._objects[k]);
 			this._normalizeObjectIds(obj);
 			o.push(obj);
 		}
@@ -213,8 +213,8 @@ exports.JSONDB.classes.MongoRESTManager = function(name, host, key, query) {
 
 	this._normalizeObjectIds = function(o) {
 		for(var k in o) {
-			if(k == exports.JSONDB.constants.ID_FIELD) {
-				if(exports.JSONDB.constants.REF_FIELD in o) {
+			if(k == module.exports.JSONDB.constants.ID_FIELD) {
+				if(module.exports.JSONDB.constants.REF_FIELD in o) {
 					o.$id = {$oid: o.$id};
 					o.$ref = this._cn;
 				} else {
@@ -238,7 +238,7 @@ exports.JSONDB.classes.MongoRESTManager = function(name, host, key, query) {
 		var c = this._name.split(':', 2);
 		var u = this._base + '/databases/' + c[0] + '/collections/' + c[1];				
 		var k = this._key;
-		var o = exports.JSONDB.objects.Log.find({cl:this._name, cm:'delete'});
+		var o = module.exports.JSONDB.objects.Log.find({cl:this._name, cm:'delete'});
 		
 		o.forEach(function(d) {
 			
@@ -258,8 +258,8 @@ exports.JSONDB.classes.MongoRESTManager = function(name, host, key, query) {
 					Ti.App.fireEvent('JSONDBDeleteError', {error: e.error, response: t.responseText, status: t.status});
 					return;
 				}
-				exports.JSONDB.objects.Log.remove({$id:d.$id});
-				exports.JSONDB.objects.Log.commit();
+				module.exports.JSONDB.objects.Log.remove({$id:d.$id});
+				module.exports.JSONDB.objects.Log.commit();
 				Ti.App.fireEvent('JSONDBDeleteSuccess', {o: o, response: t.responseText, status: t.status});
 			};
 
@@ -276,7 +276,7 @@ exports.JSONDB.classes.MongoRESTManager = function(name, host, key, query) {
  * The file system I/O manager for JSONDB collections
  * @constructor
  */
-exports.JSONDB.classes.FilesystemManager = function() {
+module.exports.JSONDB.classes.FilesystemManager = function() {
 	
 	/**
 	 * Loads a JSONDB collection from disk
@@ -287,13 +287,13 @@ exports.JSONDB.classes.FilesystemManager = function() {
 	 */
 	this.load = function(filename, secret, path) {
 		if(path == undefined) {
-			path = exports.JSONDB.constants.DEFAULT_FS_DIR;
+			path = module.exports.JSONDB.constants.DEFAULT_FS_DIR;
 		}
 		filename += '.json';
 		var file = Titanium.Filesystem.getFile(path, filename);
 		if (file.exists()) {
 			var data = JSON.parse(file.read());
-			if(exports.JSONDB.objects.CryptoProvider.verifySignature(data, secret, data._salt) == false) {
+			if(module.exports.JSONDB.objects.CryptoProvider.verifySignature(data, secret, data._salt) == false) {
 				Ti.App.fireEvent("JSONDBDataTampered", {filename:filename});
 				return false;
 			}
@@ -314,12 +314,12 @@ exports.JSONDB.classes.FilesystemManager = function() {
 	this.save = function(filename, data, secret, path) {
 		filename += '.json';
 		if(path == undefined) {
-			path = exports.JSONDB.constants.DEFAULT_FS_DIR;
+			path = module.exports.JSONDB.constants.DEFAULT_FS_DIR;
 		}		
 		if(data._salt == null) {
 			data._salt = Ti.Utils.sha1((new Date()).getTime() + "");
 		}
-		data._sig = exports.JSONDB.objects.CryptoProvider.signData(data, secret, data._salt);
+		data._sig = module.exports.JSONDB.objects.CryptoProvider.signData(data, secret, data._salt);
 		var file = Titanium.Filesystem.getFile(path, filename);
 		file.write(JSON.stringify(data));
 		return true;
@@ -331,7 +331,7 @@ exports.JSONDB.classes.FilesystemManager = function() {
  * Provides cryptography utility functions for JSONDB collections
  * @constructor
  */
-exports.JSONDB.classes.CryptoProvider = function() {
+module.exports.JSONDB.classes.CryptoProvider = function() {
 	
 	/**
 	 * Generates a signature given a string
@@ -389,7 +389,7 @@ exports.JSONDB.classes.CryptoProvider = function() {
  * @param definition an object defining the attributes to index and their individual sort orders
  * @param collection the JSONDB collection to index
  */
-exports.JSONDB.classes.BTreeIndex = function(name, definition, collection) {
+module.exports.JSONDB.classes.BTreeIndex = function(name, definition, collection) {
 	
 	this._count = 0;
 	this._name = name;
@@ -405,7 +405,7 @@ exports.JSONDB.classes.BTreeIndex = function(name, definition, collection) {
 	 * @return integer
 	 */
 	this.getType = function() {
-		return exports.JSONDB.constants.INDEX_TYPE_B_TREE;
+		return module.exports.JSONDB.constants.INDEX_TYPE_B_TREE;
 	}
 
 	/**
@@ -444,7 +444,7 @@ exports.JSONDB.classes.BTreeIndex = function(name, definition, collection) {
 		this.clear();
 		var ts = (new Date()).getTime();
 		this._recursivelyBuildIndex(this._btree, this._k.slice(), this._o.slice(), this._collection.getAll());
-		exports.JSONDB.functions.debug('building index ' + this._name + ' with ' + this._count + ' nodes took ' + ((new Date()).getTime() - ts) + ' ms');
+		module.exports.JSONDB.functions.debug('building index ' + this._name + ' with ' + this._count + ' nodes took ' + ((new Date()).getTime() - ts) + ' ms');
 	};
 
 	this._recursivelyBuildIndex = function(btree, keys, order, objects) {
@@ -458,8 +458,8 @@ exports.JSONDB.classes.BTreeIndex = function(name, definition, collection) {
 		// iterate objects
 		var k3 = null;
 		objects.forEach(function(object) {
-			exports.JSONDB.variables.tcache = {};
-			k3 = exports.JSONDB.functions.traverse(k, object);
+			module.exports.JSONDB.variables.tcache = {};
+			k3 = module.exports.JSONDB.functions.traverse(k, object);
 			if(k3 !== undefined) {
 				if(o[k3] == undefined) {
 					o[k3] = [];
@@ -504,9 +504,9 @@ exports.JSONDB.classes.BTreeIndex = function(name, definition, collection) {
 		var o = {};
 		var a = {scanned:0}; // analytics
 		var or = null;
-		if(exports.JSONDB.variables.$or in query) {
+		if(module.exports.JSONDB.variables.$or in query) {
 			or = query.$or;
-			delete query[exports.JSONDB.variables.$or];
+			delete query[module.exports.JSONDB.variables.$or];
 		}
 		this._recursiveFind(query, this._btree, 0, o, a);
 		if(or !== null) {
@@ -552,37 +552,37 @@ exports.JSONDB.classes.BTreeIndex = function(name, definition, collection) {
 				include = true;
 				for(var f in v) {
 					switch(f) {
-						case exports.JSONDB.variables.$eq:
+						case module.exports.JSONDB.variables.$eq:
 							if(k != v[f]) {
 								include = false;
 							}
 							break;
 								
-						case exports.JSONDB.variables.$ne:
+						case module.exports.JSONDB.variables.$ne:
 							if(k == v[f]) {
 								include = false;
 							}
 							break;
 							
-						case exports.JSONDB.variables.$gt:
+						case module.exports.JSONDB.variables.$gt:
 							if(k <= v[f]) {
 								include = false;
 							}
 							break;
 								
-						case exports.JSONDB.variables.$gte:
+						case module.exports.JSONDB.variables.$gte:
 							if(k < v[f]) {
 								include = false;
 							}
 							break;
 								
-						case exports.JSONDB.variables.$lt:
+						case module.exports.JSONDB.variables.$lt:
 							if(k >= v[f]) {
 								include = false;
 							}
 							break;
 								
-						case exports.JSONDB.variables.$lte:
+						case module.exports.JSONDB.variables.$lte:
 							if(k > v[f]) {
 								include = false;
 							}
@@ -633,7 +633,7 @@ exports.JSONDB.classes.BTreeIndex = function(name, definition, collection) {
 	 */
 	this.insert = function(o) {
 		for(var k in this._definition) {
-			if(exports.JSONDB.functions.traverse(k, o) == undefined) {
+			if(module.exports.JSONDB.functions.traverse(k, o) == undefined) {
 				return false;
 			}
 		}
@@ -661,7 +661,7 @@ exports.JSONDB.classes.BTreeIndex = function(name, definition, collection) {
  * @param the storage path for the collection
  * @param override whether or not to override internal constraints on collection names
  */
-exports.JSONDB.classes.Collection = function(name, secret, path, override) {
+module.exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 
 	if(name == '__log' && override !== true) {
 		throw 'The collection name __log is reserved for internal use by the JSONDB module';
@@ -671,7 +671,7 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 	this._path = path;
 	this._indexes = {};
 	this._indexed = false;
-	this._io = exports.JSONDB.objects.FilesystemManager;
+	this._io = module.exports.JSONDB.objects.FilesystemManager;
 
 	this._collection = {
 		_sig: null,
@@ -701,12 +701,12 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 	 * @return void
 	 */
 	this.ensureIndex = function(definition) {
-		var d = exports.JSONDB.functions.sortObjectKeys(definition);
-		var n = exports.JSONDB.functions.generateIndexName(d, false);
+		var d = module.exports.JSONDB.functions.sortObjectKeys(definition);
+		var n = module.exports.JSONDB.functions.generateIndexName(d, false);
 		if(n in this._indexes) {
 			return;
 		} else {
-			this._indexes[n] = new exports.JSONDB.classes.BTreeIndex(n, d, this);
+			this._indexes[n] = new module.exports.JSONDB.classes.BTreeIndex(n, d, this);
 			this._indexes[n].index();				
 		}
 		this._indexed = true;
@@ -718,12 +718,12 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 	 * @return BTreeIndex/boolean
 	 */
 	this.selectIndex = function(query) {
-		var n = exports.JSONDB.functions.generateIndexName(exports.JSONDB.functions.sortObjectKeys(query), false);
+		var n = module.exports.JSONDB.functions.generateIndexName(module.exports.JSONDB.functions.sortObjectKeys(query), false);
 		if(n in this._indexes) {
-			exports.JSONDB.functions.debug('using index ' + n);
+			module.exports.JSONDB.functions.debug('using index ' + n);
 			return this._indexes[n];
 		}
-		if(exports.JSONDB.functions.sizeOf(this._indexes) == 0) {
+		if(module.exports.JSONDB.functions.sizeOf(this._indexes) == 0) {
 			this._indexed = false;
 		}
 		return false;
@@ -735,8 +735,8 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 	 * @return boolean
 	 */
 	this.dropIndex = function(definition) {
-		var d = exports.JSONDB.functions.sortObjectKeys(definition);
-		var n = exports.JSONDB.functions.generateIndexName(d, false);
+		var d = module.exports.JSONDB.functions.sortObjectKeys(definition);
+		var n = module.exports.JSONDB.functions.generateIndexName(d, false);
 		if(n in this._indexes) {
 			delete this._indexes[n];
 			return true;
@@ -762,7 +762,7 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 	 * @return void
 	 */
 	this.initializeAPI = function(host, key, query) {
-		this.API._api = new exports.JSONDB.classes.MongoRESTManager(this._collection._name, host, key, query);
+		this.API._api = new module.exports.JSONDB.classes.MongoRESTManager(this._collection._name, host, key, query);
 	};
 	
 	/**
@@ -770,7 +770,7 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 	 * @return integer
 	 */
 	this.sizeOf = function() {
-		return exports.JSONDB.functions.sizeOf(this._collection._objects);
+		return module.exports.JSONDB.functions.sizeOf(this._collection._objects);
 	};
 
 	/**
@@ -797,7 +797,7 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 		for(var key in objects) {
 			if(typeof(objects[key]) === 'object' && objects[key] !== null) {
 				if('$ref' in objects[key]) {
-					objects[key] = new exports.JSONDB.classes.DBRef(objects[key]);
+					objects[key] = new module.exports.JSONDB.classes.DBRef(objects[key]);
 				} else {
 					this._unflatten(objects[key]);
 				}
@@ -816,7 +816,7 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 		if(typeof(query) === 'undefined') {
 			query = {};
 		}
-		if(exports.JSONDB.constants.ID_FIELD in query) {
+		if(module.exports.JSONDB.constants.ID_FIELD in query) {
 			r = [];
 			if(!(query.$id in this._collection._objects)) {
 				return r;
@@ -824,7 +824,7 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 			r.push(this._collection._objects[query.$id]);
 			return r;
 		}
-		var closure = exports.JSONDB.objects.QueryCompiler.compile(query);
+		var closure = module.exports.JSONDB.objects.QueryCompiler.compile(query);
 		var tuples = closure.execute(this);
 		if(typeof(conditions) !== 'undefined') {
 			if('$sort' in conditions) {
@@ -833,7 +833,7 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 					order = conditions.$sort[key];
 					break;
 				}
-				exports.JSONDB.functions.$sort(tuples, key, order);
+				module.exports.JSONDB.functions.$sort(tuples, key, order);
 			}
 			if('$limit' in conditions) {
 				if(conditions.$limit < tuples.length) {
@@ -841,7 +841,7 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 				}
 			}
 		}
-		exports.JSONDB.functions.debug('exports.JSONDB.classes.Collection.find (' + this._collection._name + ':' + exports.JSONDB.functions.stringify(query) + ' , ' +  exports.JSONDB.functions.stringify(conditions) + ') took ' + ((new Date()).getTime() - ts) + ' ms');
+		module.exports.JSONDB.functions.debug('module.exports.JSONDB.classes.Collection.find (' + this._collection._name + ':' + module.exports.JSONDB.functions.stringify(query) + ' , ' +  module.exports.JSONDB.functions.stringify(conditions) + ') took ' + ((new Date()).getTime() - ts) + ' ms');
 		return tuples;
 	};
 
@@ -866,7 +866,7 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 		for(var key in this._collection._objects) {
 			objects.push(this._collection._objects[key]);
 		}
-		exports.JSONDB.functions.debug('exports.JSONDB.classes.Collection.getAll (' + this._collection._name + ') took ' + ((new Date()).getTime() - ts) + ' ms');
+		module.exports.JSONDB.functions.debug('module.exports.JSONDB.classes.Collection.getAll (' + this._collection._name + ') took ' + ((new Date()).getTime() - ts) + ' ms');
 		return objects;
 	};
 
@@ -877,8 +877,8 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 	 */
 	this.save = function(o) {
 		var ts = (new Date()).getTime();
-		if(!(exports.JSONDB.constants.ID_FIELD in o)) {
-			o.$id = exports.JSONDB.functions.generateBSONIdentifier();
+		if(!(module.exports.JSONDB.constants.ID_FIELD in o)) {
+			o.$id = module.exports.JSONDB.functions.generateBSONIdentifier();
 			this._collection._lastInsertId = o.$id;
 		}
 		this._collection._objects[o.$id] = o;
@@ -903,7 +903,7 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 		if(typeof(upsert) == 'undefined') {
 			upsert = false;
 		}
-		var closure = exports.JSONDB.objects.MutateCompiler.compile(updates);
+		var closure = module.exports.JSONDB.objects.MutateCompiler.compile(updates);
 		var objects = this.find(query, conditions);
 		closure.executeUpdate(objects, upsert);
 		var l = objects.length;
@@ -912,7 +912,7 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 				this._indexes[n].insert(objects[i]);
 			}
 		}
-		exports.JSONDB.functions.debug('exports.JSONDB.classes.Collection.update (' + this._collection._name + ':' + exports.JSONDB.functions.stringify(updates) + ') took ' + ((new Date()).getTime() - ts) + ' ms');
+		module.exports.JSONDB.functions.debug('module.exports.JSONDB.classes.Collection.update (' + this._collection._name + ':' + module.exports.JSONDB.functions.stringify(updates) + ') took ' + ((new Date()).getTime() - ts) + ' ms');
 		return objects.length;
 	};
 	
@@ -963,7 +963,7 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 				this._indexes[n].remove(o);
 			}
 			if(r) {
-				exports.JSONDB.objects.Log.save({
+				module.exports.JSONDB.objects.Log.save({
 					$id: o.$id,
 					cl: this._collection._name,
 					ts: (new Date()).getTime(),
@@ -973,15 +973,15 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
 			}
 		}
 		if(this._indexed == true) {
-			exports.JSONDB.functions.debug('took ' + ((new Date()).getTime() - ts2) + ' ms to update all indexes for ' + objects.length + ' records');
+			module.exports.JSONDB.functions.debug('took ' + ((new Date()).getTime() - ts2) + ' ms to update all indexes for ' + objects.length + ' records');
 		}
 		if(r) {
-			exports.JSONDB.objects.Log.commit();
+			module.exports.JSONDB.objects.Log.commit();
 		}
 		if(this._auto_commit) {
 			this.commit();
 		}
-		exports.JSONDB.functions.debug('exports.JSONDB.classes.Collection.remove (' + this._collection._name + ') took ' + ((new Date()).getTime() - ts) + ' ms');
+		module.exports.JSONDB.functions.debug('module.exports.JSONDB.classes.Collection.remove (' + this._collection._name + ') took ' + ((new Date()).getTime() - ts) + ' ms');
 		return objects.length;
 	};
 
@@ -1002,11 +1002,11 @@ exports.JSONDB.classes.Collection = function(name, secret, path, override) {
  * @return void
  * @throws Exception (illegal object reference)
  */
-exports.JSONDB.classes.DBRef = function(struct) {
+module.exports.JSONDB.classes.DBRef = function(struct) {
 
 	if(typeof(struct) !== 'object'
-	|| !(exports.JSONDB.constants.REF_FIELD in struct)
-	|| !(exports.JSONDB.constants.ID_FIELD in struct)) {
+	|| !(module.exports.JSONDB.constants.REF_FIELD in struct)
+	|| !(module.exports.JSONDB.constants.ID_FIELD in struct)) {
 		throw "illegal object reference";
 	}
 	
@@ -1034,7 +1034,7 @@ exports.JSONDB.classes.DBRef = function(struct) {
 	 * @return object/boolean
 	 */
 	this.resolve = function() {
-		var o = exports.JSONDB.objects.Database.getCollection(this.$ref).find({$id:this.$id});
+		var o = module.exports.JSONDB.objects.Database.getCollection(this.$ref).find({$id:this.$id});
 		if(o !== false) {
 			return o[0];
 		}
@@ -1048,7 +1048,7 @@ exports.JSONDB.classes.DBRef = function(struct) {
  * @param query the query expressions to execute
  * @constructor
  */
-exports.JSONDB.classes.QueryClosure = function(query) {
+module.exports.JSONDB.classes.QueryClosure = function(query) {
 
 	this._query = query;
 	
@@ -1107,7 +1107,7 @@ exports.JSONDB.classes.QueryClosure = function(query) {
 		var objects = [];
 		var doOrs = this._orFunctions.length > 0;
 		for(var key in collection._collection._objects) {
-			exports.JSONDB.variables.tcache = {};
+			module.exports.JSONDB.variables.tcache = {};
 			var include = this._evaluate(this._andFunctions, this._andArguments, collection._collection._objects[key]);
 			if(doOrs) {
 				include = include || this._evaluate(this._orFunctions, this._orArguments, collection._collection._objects[key]);
@@ -1157,7 +1157,7 @@ exports.JSONDB.classes.QueryClosure = function(query) {
  * Compiles a QueryClosure instance used specifically to traverse collection data
  * @constructor
  */
-exports.JSONDB.classes.QueryCompiler = function() {
+module.exports.JSONDB.classes.QueryCompiler = function() {
 
 	this._cache = {};
 	
@@ -1167,7 +1167,7 @@ exports.JSONDB.classes.QueryCompiler = function() {
 	 * @return QueryClosure
 	 */	
 	this.compile = function(query) {
-		var closure = new exports.JSONDB.classes.QueryClosure(query);
+		var closure = new module.exports.JSONDB.classes.QueryClosure(query);
 		this._compile(query, closure, false);
 		return closure;
 	};
@@ -1177,27 +1177,27 @@ exports.JSONDB.classes.QueryCompiler = function() {
 			var value = query[key];
 			switch(typeof(value)) {
 				case 'object':
-					if(key == exports.JSONDB.variables.$or) {
+					if(key == module.exports.JSONDB.variables.$or) {
 						this._compile(value, closure, true);
 					} else {
 						for(var func in value) {
 							switch(func)
 							{
-								case exports.JSONDB.variables.$eq:
-								case exports.JSONDB.variables.$ne:
-								case exports.JSONDB.variables.$exists:
-								case exports.JSONDB.variables.$size:
-								case exports.JSONDB.variables.$within:
-								case exports.JSONDB.variables.$gt:
-								case exports.JSONDB.variables.$gte:
-								case exports.JSONDB.variables.$lt:
-								case exports.JSONDB.variables.$lte:
-								case exports.JSONDB.variables.$in:
-								case exports.JSONDB.variables.$sort:
-								case exports.JSONDB.variables.$unset:
-								case exports.JSONDB.variables.$inc:
-								case exports.JSONDB.variables.$set:
-									this._addFunction(closure, exports.JSONDB.functions[func], [key, value[func]], or);
+								case module.exports.JSONDB.variables.$eq:
+								case module.exports.JSONDB.variables.$ne:
+								case module.exports.JSONDB.variables.$exists:
+								case module.exports.JSONDB.variables.$size:
+								case module.exports.JSONDB.variables.$within:
+								case module.exports.JSONDB.variables.$gt:
+								case module.exports.JSONDB.variables.$gte:
+								case module.exports.JSONDB.variables.$lt:
+								case module.exports.JSONDB.variables.$lte:
+								case module.exports.JSONDB.variables.$in:
+								case module.exports.JSONDB.variables.$sort:
+								case module.exports.JSONDB.variables.$unset:
+								case module.exports.JSONDB.variables.$inc:
+								case module.exports.JSONDB.variables.$set:
+									this._addFunction(closure, module.exports.JSONDB.functions[func], [key, value[func]], or);
 									break;
 							}
 						}
@@ -1205,7 +1205,7 @@ exports.JSONDB.classes.QueryCompiler = function() {
 					break;
 				
 				default:
-					this._addFunction(closure, exports.JSONDB.functions.$eq, [key, value], or);
+					this._addFunction(closure, module.exports.JSONDB.functions.$eq, [key, value], or);
 					break;
 			}
 		}
@@ -1225,7 +1225,7 @@ exports.JSONDB.classes.QueryCompiler = function() {
  * Factory wrapper that generates a QueryClosure instance used specifically to mutate collection data
  * @constructor
  */
-exports.JSONDB.classes.MutateCompiler = function() {
+module.exports.JSONDB.classes.MutateCompiler = function() {
 
 	this._cache = {};
 	
@@ -1235,7 +1235,7 @@ exports.JSONDB.classes.MutateCompiler = function() {
 	 * @return QueryClosure
 	 */
 	this.compile = function(updates) {
-		var closure = new exports.JSONDB.classes.QueryClosure(updates);
+		var closure = new module.exports.JSONDB.classes.QueryClosure(updates);
 		this._compile(updates, closure);
 		return closure;
 	};
@@ -1244,14 +1244,14 @@ exports.JSONDB.classes.MutateCompiler = function() {
 		for(var key in updates) {
 			switch(key)
 			{
-				case exports.JSONDB.variables.$unset:
-				case exports.JSONDB.variables.$inc:
-				case exports.JSONDB.variables.$set:
+				case module.exports.JSONDB.variables.$unset:
+				case module.exports.JSONDB.variables.$inc:
+				case module.exports.JSONDB.variables.$set:
 					for(var skey in updates[key]) {
 						var args = [];
 						args.push(skey);
 						args.push(updates[key][skey]);
-						closure.addUpdateFunction(exports.JSONDB.functions[key], args);
+						closure.addUpdateFunction(module.exports.JSONDB.functions[key], args);
 					}
 					break;
 			}
@@ -1263,8 +1263,8 @@ exports.JSONDB.classes.MutateCompiler = function() {
 /**
  * Query expression closures below
  */
-exports.JSONDB.functions.$eq = function(a, b, c) {
-	var v = exports.JSONDB.functions.traverse(a, c);
+module.exports.JSONDB.functions.$eq = function(a, b, c) {
+	var v = module.exports.JSONDB.functions.traverse(a, c);
 	if(v === undefined) {
 		return false;
 	}
@@ -1285,8 +1285,8 @@ exports.JSONDB.functions.$eq = function(a, b, c) {
 	}
 };
 
-exports.JSONDB.functions.$ne = function(a, b, c) {
-	var v = exports.JSONDB.functions.traverse(a, c);
+module.exports.JSONDB.functions.$ne = function(a, b, c) {
+	var v = module.exports.JSONDB.functions.traverse(a, c);
 	if(v === undefined) {
 		return false;
 	}
@@ -1307,16 +1307,16 @@ exports.JSONDB.functions.$ne = function(a, b, c) {
 	}
 };
 
-exports.JSONDB.functions.$exists = function(a, yes, b) {
-	var v = exports.JSONDB.functions.traverse(a, b);
+module.exports.JSONDB.functions.$exists = function(a, yes, b) {
+	var v = module.exports.JSONDB.functions.traverse(a, b);
 	if(yes) {
 		return v !== undefined;
 	}
 	return v === undefined;
 };
 
-exports.JSONDB.functions.$size = function(a, b, c) {
-	var v = exports.JSONDB.functions.traverse(a, c);
+module.exports.JSONDB.functions.$size = function(a, b, c) {
+	var v = module.exports.JSONDB.functions.traverse(a, c);
 	if(v instanceof Array || typeof(v) === 'string') {
 		return v.length == b;
 	} else {
@@ -1328,8 +1328,8 @@ exports.JSONDB.functions.$size = function(a, b, c) {
 	}
 };
 
-exports.JSONDB.functions.$within = function(a, b, c) {
-	var v = exports.JSONDB.functions.traverse(a, c);
+module.exports.JSONDB.functions.$within = function(a, b, c) {
+	var v = module.exports.JSONDB.functions.traverse(a, c);
 	if(!('lat' in v) || !('lng' in v)) {
 		return false;
 	}
@@ -1337,24 +1337,24 @@ exports.JSONDB.functions.$within = function(a, b, c) {
 	return (d <= b[1]);
 };
 
-exports.JSONDB.functions.$gt = function(a, b, c) {
-	return exports.JSONDB.functions.traverse(a, c) > b;
+module.exports.JSONDB.functions.$gt = function(a, b, c) {
+	return module.exports.JSONDB.functions.traverse(a, c) > b;
 };
 
-exports.JSONDB.functions.$gte = function(a, b, c) {
-	return exports.JSONDB.functions.traverse(a, c) >= b;
+module.exports.JSONDB.functions.$gte = function(a, b, c) {
+	return module.exports.JSONDB.functions.traverse(a, c) >= b;
 };
 
-exports.JSONDB.functions.$lt = function(a, b, c) {
-	return exports.JSONDB.functions.traverse(a, c) < b;
+module.exports.JSONDB.functions.$lt = function(a, b, c) {
+	return module.exports.JSONDB.functions.traverse(a, c) < b;
 };
 
-exports.JSONDB.functions.$lte = function(a, b, c) {
-	return exports.JSONDB.functions.traverse(a, c) <= b;
+module.exports.JSONDB.functions.$lte = function(a, b, c) {
+	return module.exports.JSONDB.functions.traverse(a, c) <= b;
 };
 
-exports.JSONDB.functions.$in = function(a, b, c) {
-	var v = exports.JSONDB.functions.traverse(a, c);
+module.exports.JSONDB.functions.$in = function(a, b, c) {
+	var v = module.exports.JSONDB.functions.traverse(a, c);
 	if(typeof(v) !== 'undefined') {
 		var l = b.length;
 		for(var i=0; i < l; i++) {
@@ -1366,33 +1366,33 @@ exports.JSONDB.functions.$in = function(a, b, c) {
 	return false;
 };
 
-exports.JSONDB.functions.$nin = function(a, b, c) {
-	return !exports.JSONDB.functions.$in(a, b, c);
+module.exports.JSONDB.functions.$nin = function(a, b, c) {
+	return !module.exports.JSONDB.functions.$in(a, b, c);
 };
 
-exports.JSONDB.functions.$or = function(a, b, c) {
-	return exports.JSONDB.functions.traverse(a, b) !== undefined;
+module.exports.JSONDB.functions.$or = function(a, b, c) {
+	return module.exports.JSONDB.functions.traverse(a, b) !== undefined;
 };
 
-exports.JSONDB.functions.$sort = function(c, a, b) {
+module.exports.JSONDB.functions.$sort = function(c, a, b) {
 	switch(b) {
 		case -1: // descending
-			exports.JSONDB.functions.debug('exports.JSONDB.functions.$sort: descending, ' + a);
+			module.exports.JSONDB.functions.debug('module.exports.JSONDB.functions.$sort: descending, ' + a);
 			c.sort(function(v1, v2){return v2[a] - v1[a];});
 			break;
 		
 		case 0: // random
-			exports.JSONDB.functions.debug('exports.JSONDB.functions.$sort: random, ' + a);
-			exports.JSONDB.functions.shuffle(c);
+			module.exports.JSONDB.functions.debug('module.exports.JSONDB.functions.$sort: random, ' + a);
+			module.exports.JSONDB.functions.shuffle(c);
 			break;
 		
 		case 1: // ascending
-			exports.JSONDB.functions.debug('exports.JSONDB.functions.$sort: ascending, ' + a);
+			module.exports.JSONDB.functions.debug('module.exports.JSONDB.functions.$sort: ascending, ' + a);
 			c.sort(function(v1, v2){return v1[a] - v2[a];});
 			break;
 		
 		case 2: // alphabetically
-			exports.JSONDB.functions.debug('exports.JSONDB.functions.$sort: alphabetically, ' + a);
+			module.exports.JSONDB.functions.debug('module.exports.JSONDB.functions.$sort: alphabetically, ' + a);
 			c.sort(function(v1, v2){ 
 				if(v2[a] > v1[a]) {
 					return -1;
@@ -1405,7 +1405,7 @@ exports.JSONDB.functions.$sort = function(c, a, b) {
 			break;
 		
 		case 3: //  reverse
-			exports.JSONDB.functions.debug('exports.JSONDB.functions.$sort: reverse, ' + a);
+			module.exports.JSONDB.functions.debug('module.exports.JSONDB.functions.$sort: reverse, ' + a);
 			c.sort(function(v1, v2){
 				if(v2[a] < v1[a]) {
 					return -1;
@@ -1419,37 +1419,37 @@ exports.JSONDB.functions.$sort = function(c, a, b) {
 	}
 };
 
-exports.JSONDB.functions.$set = function(name, value, tuple, upsert) {
-	var parts = exports.JSONDB.functions.truncatePath(name);
+module.exports.JSONDB.functions.$set = function(name, value, tuple, upsert) {
+	var parts = module.exports.JSONDB.functions.truncatePath(name);
 	if(parts === false) {
-		exports.JSONDB.functions.$_upsert(name, value, tuple, upsert, false);
+		module.exports.JSONDB.functions.$_upsert(name, value, tuple, upsert, false);
 	} else {
-		var stuple = exports.JSONDB.functions.traverse(parts[0], tuple);
-		exports.JSONDB.functions.$_upsert(parts[1], value, stuple, upsert, false);
+		var stuple = module.exports.JSONDB.functions.traverse(parts[0], tuple);
+		module.exports.JSONDB.functions.$_upsert(parts[1], value, stuple, upsert, false);
 	}
 }
 
-exports.JSONDB.functions.$unset = function(name, value, tuple, upsert) {
-	var parts = exports.JSONDB.functions.truncatePath(name);
+module.exports.JSONDB.functions.$unset = function(name, value, tuple, upsert) {
+	var parts = module.exports.JSONDB.functions.truncatePath(name);
 	if(parts === false) {
 		delete tuple[name];
 	} else {
-		var stuple = exports.JSONDB.functions.traverse(parts[0], tuple, false);
+		var stuple = module.exports.JSONDB.functions.traverse(parts[0], tuple, false);
 		delete stuple[name];
 	}
 }
 
-exports.JSONDB.functions.$inc = function(name, value, tuple, upsert) {
-	var parts = exports.JSONDB.functions.truncatePath(name);
+module.exports.JSONDB.functions.$inc = function(name, value, tuple, upsert) {
+	var parts = module.exports.JSONDB.functions.truncatePath(name);
 	if(parts === false) {
-		exports.JSONDB.functions.$_upsert(name, value, tuple, upsert, true);
+		module.exports.JSONDB.functions.$_upsert(name, value, tuple, upsert, true);
 	} else {
-		var stuple = exports.JSONDB.functions.traverse(parts[0], tuple);
-		exports.JSONDB.functions.$_upsert(parts[1], value, stuple, upsert, true);
+		var stuple = module.exports.JSONDB.functions.traverse(parts[0], tuple);
+		module.exports.JSONDB.functions.$_upsert(parts[1], value, stuple, upsert, true);
 	}
 }
 
-exports.JSONDB.functions.$_upsert = function(name, value, tuple, upsert, increment) {
+module.exports.JSONDB.functions.$_upsert = function(name, value, tuple, upsert, increment) {
 	if(name in tuple) {
 		if(increment) {
 			tuple[name] += value;
@@ -1472,8 +1472,8 @@ exports.JSONDB.functions.$_upsert = function(name, value, tuple, upsert, increme
  * @param id the object identifier to use for the DBRef
  * @return DBRef
  */
-exports.factoryDBRef = function(collection, id) {
-	return new exports.JSONDB.classes.DBRef({$ref:collection, $id:id});
+module.exports.factoryDBRef = function(collection, id) {
+	return new module.exports.JSONDB.classes.DBRef({$ref:collection, $id:id});
 };
 
 /**
@@ -1483,8 +1483,8 @@ exports.factoryDBRef = function(collection, id) {
  * @param path the storage location for the collection (if not set defaults to module wide location)
  * @return Collection
  */
-exports.factory = function(name, secret, path, override) {
-	return exports.JSONDB.objects.Database.getCollection(name, secret, path, override);
+module.exports.factory = function(name, secret, path, override) {
+	return module.exports.JSONDB.objects.Database.getCollection(name, secret, path, override);
 };
 
 /**
@@ -1492,8 +1492,8 @@ exports.factory = function(name, secret, path, override) {
  * @param semaphor the flag signifying whether or not to log console debug output
  * @return void
  */
-exports.debug = function(semaphor) {
-	exports.JSONDB.variables.debug = semaphor;
+module.exports.debug = function(semaphor) {
+	module.exports.JSONDB.variables.debug = semaphor;
 };
 
 /**
@@ -1501,8 +1501,8 @@ exports.debug = function(semaphor) {
  * @param path the path to use when storing and retrieving collection data
  * @return void
  */
-exports.storageLocation = function(path) {
-	exports.JSONDB.constants.DEFAULT_FS_DIR = path;
+module.exports.storageLocation = function(path) {
+	module.exports.JSONDB.constants.DEFAULT_FS_DIR = path;
 };
 
 /**
@@ -1510,8 +1510,8 @@ exports.storageLocation = function(path) {
  * @param message the message to log to the console
  * @return void
  */
-exports.JSONDB.functions.debug = function(message) {
-	if(exports.JSONDB.variables.debug == true) {
+module.exports.JSONDB.functions.debug = function(message) {
+	if(module.exports.JSONDB.variables.debug == true) {
 		Ti.API.info(message);
 	}
 };
@@ -1521,7 +1521,7 @@ exports.JSONDB.functions.debug = function(message) {
  * @param from the lower threshold of the range
  * @param to the upper threshold of the range
  */
-exports.JSONDB.functions.randomFromTo = function(from, to) {
+module.exports.JSONDB.functions.randomFromTo = function(from, to) {
 	return Math.floor(Math.random() * (to - from + 1) + from);
 };
 
@@ -1529,14 +1529,14 @@ exports.JSONDB.functions.randomFromTo = function(from, to) {
  * Generates a BSON Object Identifier string
  * @return string
  */
-exports.JSONDB.functions.generateBSONIdentifier = function() {
+module.exports.JSONDB.functions.generateBSONIdentifier = function() {
 	var ts = Math.floor((new Date()).getTime()/1000).toString(16);
 	var hs = Titanium.Utils.md5HexDigest(Titanium.Platform.macaddress).substring(0, 6);
-	var pid = exports.JSONDB.functions.randomFromTo(1000, 9999).toString(16);
+	var pid = module.exports.JSONDB.functions.randomFromTo(1000, 9999).toString(16);
 	while(pid.length < 4) {
 		pid = '0' + pid;
 	}
-	var inc = exports.JSONDB.functions.randomFromTo(100000, 999999).toString(16);
+	var inc = module.exports.JSONDB.functions.randomFromTo(100000, 999999).toString(16);
 	while(inc.length < 6) {
 		inc = '0' + inc;
 	}
@@ -1547,7 +1547,7 @@ exports.JSONDB.functions.generateBSONIdentifier = function() {
  * Generates a struct in the same format as a MongoDate object
  * @return object
  */
-exports.JSONDB.functions.generateMongoDate = function() {
+module.exports.JSONDB.functions.generateMongoDate = function() {
 	var t = (new Date()).getTime().toString();
 	return {
 		'sec': parseInt(t.substring(0, 10)),
@@ -1560,7 +1560,7 @@ exports.JSONDB.functions.generateMongoDate = function() {
  * @param path the string path expression
  * @return array
  */
-exports.JSONDB.functions.truncatePath = function(path) {
+module.exports.JSONDB.functions.truncatePath = function(path) {
 	if(path.match(/\./g) === null) {
 		return false;
 	}
@@ -1575,9 +1575,9 @@ exports.JSONDB.functions.truncatePath = function(path) {
  * @param object the object to traverse
  * @return mixed
  */
-exports.JSONDB.functions.traverse = function(path, object) {
-	if(path in exports.JSONDB.variables.tcache) {
-		return exports.JSONDB.variables.tcache[path];
+module.exports.JSONDB.functions.traverse = function(path, object) {
+	if(path in module.exports.JSONDB.variables.tcache) {
+		return module.exports.JSONDB.variables.tcache[path];
 	}
 	var t = function(p, o) {
 		if(o === undefined) {
@@ -1590,8 +1590,8 @@ exports.JSONDB.functions.traverse = function(path, object) {
 			return t(p, o[idx]);
 		}
 	};
-	exports.JSONDB.variables.tcache[path] = t(path.split('.'), object);
-	return exports.JSONDB.variables.tcache[path];
+	module.exports.JSONDB.variables.tcache[path] = t(path.split('.'), object);
+	return module.exports.JSONDB.variables.tcache[path];
 };
 
 /**
@@ -1599,7 +1599,7 @@ exports.JSONDB.functions.traverse = function(path, object) {
  * @param o the object to serialize
  * @return string
  */
-exports.JSONDB.functions.stringify = function(o) {
+module.exports.JSONDB.functions.stringify = function(o) {
 	var clone = {};
 	for(var key in o) {
 		if(typeof(o[key]) == 'function') {
@@ -1616,7 +1616,7 @@ exports.JSONDB.functions.stringify = function(o) {
  * @param c the array to randomize
  * @return void
  */
-exports.JSONDB.functions.shuffle = function(c) {
+module.exports.JSONDB.functions.shuffle = function(c) {
     var tmp, current, top = c.length;
     if(top) while(--top) {
         current = Math.floor(Math.random() * (top + 1));
@@ -1631,7 +1631,7 @@ exports.JSONDB.functions.shuffle = function(c) {
  * @param o the object to count
  * @return integer
  */
-exports.JSONDB.functions.sizeOf = function(o) {
+module.exports.JSONDB.functions.sizeOf = function(o) {
     var size = 0, key;
     for (key in o) {
         if (o.hasOwnProperty(key)) size++;
@@ -1644,7 +1644,7 @@ exports.JSONDB.functions.sizeOf = function(o) {
  * @param object the object to sort and clone
  * @return object
  */
-exports.JSONDB.functions.sortObjectKeys = function(object) {
+module.exports.JSONDB.functions.sortObjectKeys = function(object) {
 	var o = {};
 	var k = [];
 	for(var key in object) {
@@ -1672,10 +1672,10 @@ exports.JSONDB.functions.sortObjectKeys = function(object) {
  * @param unique a flag signifying whether the index is sparse or unique
  * @return string
  */
-exports.JSONDB.functions.generateIndexName = function(o, unique) {
+module.exports.JSONDB.functions.generateIndexName = function(o, unique) {
 	var n = [];
 	for(var k in o) {
-		if(k == exports.JSONDB.variables.$or) {
+		if(k == module.exports.JSONDB.variables.$or) {
 			continue;
 		}
 		n.push(k);
@@ -1691,11 +1691,14 @@ exports.JSONDB.functions.generateIndexName = function(o, unique) {
  * @param o the object to clone
  * @return object
  */
-exports.JSONDB.functions.cloneObject = function(o) {
+module.exports.JSONDB.functions.cloneObject = function(o) {
 	var c = {};
+	if(Object.prototype.toString.call(o) == '[object Array]') {
+		c = [];
+	}
 	for(var a in o) {
 		if(typeof(o[a]) == "object") {
-			c[a] = exports.JSONDB.functions.cloneObject(o[a]);
+			c[a] = module.exports.JSONDB.functions.cloneObject(o[a]);
 		} else {
 			c[a] = o[a];
 		}
@@ -1706,11 +1709,11 @@ exports.JSONDB.functions.cloneObject = function(o) {
 /**
  * Global object references
  */
-exports.JSONDB.objects.FilesystemManager = new exports.JSONDB.classes.FilesystemManager();
-exports.JSONDB.objects.CryptoProvider = new exports.JSONDB.classes.CryptoProvider();
-exports.JSONDB.objects.Database = new exports.JSONDB.classes.Database();
-exports.JSONDB.objects.QueryCompiler = new exports.JSONDB.classes.QueryCompiler();
-exports.JSONDB.objects.MutateCompiler = new exports.JSONDB.classes.MutateCompiler();
+module.exports.JSONDB.objects.FilesystemManager = new module.exports.JSONDB.classes.FilesystemManager();
+module.exports.JSONDB.objects.CryptoProvider = new module.exports.JSONDB.classes.CryptoProvider();
+module.exports.JSONDB.objects.Database = new module.exports.JSONDB.classes.Database();
+module.exports.JSONDB.objects.QueryCompiler = new module.exports.JSONDB.classes.QueryCompiler();
+module.exports.JSONDB.objects.MutateCompiler = new module.exports.JSONDB.classes.MutateCompiler();
 
 // the object deletion log for collections linked to MongoDB collections
-exports.JSONDB.objects.Log = exports.factory('___log', 'repl:C7E7CB377BADE1D68BA0FFBD03347CA18D746817AC50CE407EA40BE5677ACB9D', undefined, true);
+module.exports.JSONDB.objects.Log = module.exports.factory('___log', 'repl:C7E7CB377BADE1D68BA0FFBD03347CA18D746817AC50CE407EA40BE5677ACB9D', undefined, true);
