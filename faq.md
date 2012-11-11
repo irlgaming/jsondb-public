@@ -6,11 +6,7 @@ Frequently asked questions about JSONDB - this document is updated as new questi
 
 ## Why is there no Android support? (When will Android support be available?)
 
-At the moment Android support is unavailable due to limitations in the Titanium platform. The following JIRA describes the issue:
-
-http://jira.appcelerator.org/browse/TIMOB-4521
-
-As soon as Appcelerator close the above ticket I'll release an Android version of the module.	
+There is! Just include the module source directly into your project.
 
 ## Where can I find documentation and/or code examples?
 
