@@ -374,6 +374,12 @@ Supported expressions within the update object are as follows:
 * $unset: removes the specified object property
    * collection.update({i:2}, {$unset:{j:true}}); // removes the property j from all objects where i equals 2
 
+* $push: pushes an element to the end of an array - if the specified key does not correspond to an array this command will fail silently
+   * collection.update({i:2}, {$push:{foo:'bar'}});
+
+* $pushAll: pushes elements to the end of an array - if the specified key does not correspond to an array this command will fail silently
+   * collection.update({i:2}, {$pushAll:{foo:['bar', 'bar2', 'bar3']}});
+
 #### Exceptions
 
 None

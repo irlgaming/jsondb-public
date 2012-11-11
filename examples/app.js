@@ -44,7 +44,7 @@ global.collection.clear();
  * this code adds a bunch of new objects to the global.collection
  */
 var names = ['Tom', 'Dick', 'Harry', 'John'];
-for(var i=0; i < 500; i++) {
+for(var i=0; i < 50; i++) {
 	var a = [];
 	var n = jsondb.JSONDB.functions.randomFromTo(3, 12);
 	for(var j=0; j < n; j++) {
@@ -58,6 +58,7 @@ for(var i=0; i < 500; i++) {
 		as:a.length,
 		term: Math.random().toString(36).substring(7),
 		ts:(new Date()).getTime(),
+		foo:['bar','bar2'],
 		o: {
 			a: jsondb.JSONDB.functions.randomFromTo(1, 30),
 			b: jsondb.JSONDB.functions.randomFromTo(1, 30),
@@ -138,6 +139,16 @@ Ti.API.info("{n:10}: " + global.collection.count({n:10}));
 Ti.API.info("{a:5}: " + global.collection.count({a:5}));
 Ti.API.info("{a:{$ne:5}}: " + global.collection.count({a:{$ne:5}}));
 Ti.API.info("{as:5}: " + global.collection.count({as:5}));
+
+/**
+ * update all objects where i equals 10 by pushing the string "bar3" to the array stored in key "foo"
+ */
+global.collection.update({i:10}, {$push:{foo:'bar3'}});
+
+/**
+ * update all objects where i equals 10 by pushing the strings "bar3" and "bar4" to the array stored in key "foo"
+ */
+global.collection.update({i:10}, {$pushAll:{foo:['bar3', 'bar4']}});
 
 /**
  * update all objects where i is greater than or equal to 90 and increment n by 1

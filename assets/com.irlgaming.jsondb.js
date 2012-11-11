@@ -55,6 +55,8 @@ exports.JSONDB.variables.$sort = "$sort";
 exports.JSONDB.variables.$unset = "$unset";
 exports.JSONDB.variables.$inc = "$inc";
 exports.JSONDB.variables.$set = "$set";
+exports.JSONDB.variables.$push = "$push";
+exports.JSONDB.variables.$pushAll = "$pushAll";
 
 // a cache used to store traversal information for objects between inner loop iterations
 exports.JSONDB.variables.tcache = {};
@@ -1197,6 +1199,8 @@ exports.JSONDB.classes.QueryCompiler = function() {
 								case exports.JSONDB.variables.$unset:
 								case exports.JSONDB.variables.$inc:
 								case exports.JSONDB.variables.$set:
+								case exports.JSONDB.variables.$push:
+								case exports.JSONDB.variables.$pushAll:
 									this._addFunction(closure, exports.JSONDB.functions[func], [key, value[func]], or);
 									break;
 							}
@@ -1247,6 +1251,8 @@ exports.JSONDB.classes.MutateCompiler = function() {
 				case exports.JSONDB.variables.$unset:
 				case exports.JSONDB.variables.$inc:
 				case exports.JSONDB.variables.$set:
+				case exports.JSONDB.variables.$push:
+				case exports.JSONDB.variables.$pushAll:
 					for(var skey in updates[key]) {
 						var args = [];
 						args.push(skey);
@@ -1419,6 +1425,31 @@ exports.JSONDB.functions.$sort = function(c, a, b) {
 	}
 };
 
+exports.JSONDB.functions.$push = function(name, value, tuple, upsert) {
+	var parts = exports.JSONDB.functions.truncatePath(name);
+	if(parts === false) {
+		exports.JSONDB.functions.$_upsert(name, [value], tuple, upsert, false);
+	} else {
+		var stuple = exports.JSONDB.functions.traverse(parts[0], tuple);
+		exports.JSONDB.functions.$_push = function(parts[1], value, stuple, upsert)
+	}	
+}
+
+exports.JSONDB.functions.$pushAll = function(name, value, tuple, upsert) {
+	if(!exports.JSONDB.functions.isArray(value)) {
+		value = [value];
+	}
+	var parts = exports.JSONDB.functions.truncatePath(name);
+	if(parts === false) {
+		exports.JSONDB.functions.$_upsert(name, [value], tuple, upsert, false);
+	} else {
+		var stuple = exports.JSONDB.functions.traverse(parts[0], tuple);
+		value.forEach(function(element) {
+			exports.JSONDB.functions.$_push = function(parts[1], element, stuple, upsert);
+		});
+	}	
+}
+
 exports.JSONDB.functions.$set = function(name, value, tuple, upsert) {
 	var parts = exports.JSONDB.functions.truncatePath(name);
 	if(parts === false) {
@@ -1448,6 +1479,19 @@ exports.JSONDB.functions.$inc = function(name, value, tuple, upsert) {
 		exports.JSONDB.functions.$_upsert(parts[1], value, stuple, upsert, true);
 	}
 }
+
+exports.JSONDB.functions.$_push = function(name, value, tuple, upsert) {
+	if(!exports.JSONDB.functions.isArray(tuple[name])) {
+		return false;
+	}
+	if(name in tuple) {
+		tuple[name].push(value);
+	} else {
+		if(upsert) {
+			tuple[name] = [value];
+		}
+	}
+};
 
 exports.JSONDB.functions.$_upsert = function(name, value, tuple, upsert, increment) {
 	if(name in tuple) {
@@ -1515,6 +1559,15 @@ exports.JSONDB.functions.debug = function(message) {
 		Ti.API.info(message);
 	}
 };
+
+/**
+ * Determines whether or not a variable references an array
+ * @param the variable to determine the type for
+ * @return boolean
+ */
+exports.JSONDB.functions.isArray = function(o) {
+	return (Object.prototype.toString.call(o) === '[object Array]');
+}
 
 /**
  * Generates a random number between two numbers
