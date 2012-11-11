@@ -1428,10 +1428,10 @@ module.exports.JSONDB.functions.$sort = function(c, a, b) {
 module.exports.JSONDB.functions.$push = function(name, value, tuple, upsert) {
 	var parts = module.exports.JSONDB.functions.truncatePath(name);
 	if(parts === false) {
-		module.exports.JSONDB.functions.$_upsert(name, [value], tuple, upsert, false);
+		module.exports.JSONDB.functions.$_push(name, value, tuple, upsert);
 	} else {
 		var stuple = exports.JSONDB.functions.traverse(parts[0], tuple);
-		module.exports.JSONDB.functions.$_push = function(parts[1], value, stuple, upsert)
+		module.exports.JSONDB.functions.$_push(parts[1], value, stuple, upsert)
 	}	
 }
 
@@ -1441,11 +1441,13 @@ module.exports.JSONDB.functions.$pushAll = function(name, value, tuple, upsert) 
 	}
 	var parts = module.exports.JSONDB.functions.truncatePath(name);
 	if(parts === false) {
-		module.exports.JSONDB.functions.$_upsert(name, [value], tuple, upsert, false);
+		value.forEach(function(element) {
+			module.exports.JSONDB.functions.$_push(name, element, tuple, upsert);
+		});
 	} else {
 		var stuple = module.exports.JSONDB.functions.traverse(parts[0], tuple);
 		value.forEach(function(element) {
-			module.exports.JSONDB.functions.$_push = function(parts[1], element, stuple, upsert);
+			module.exports.JSONDB.functions.$_push(parts[1], element, stuple, upsert);
 		});
 	}	
 }
