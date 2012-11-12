@@ -1483,10 +1483,10 @@ module.exports.JSONDB.functions.$inc = function(name, value, tuple, upsert) {
 }
 
 module.exports.JSONDB.functions.$_push = function(name, value, tuple, upsert) {
-	if(!module.exports.JSONDB.functions.isArray(tuple[name])) {
-		return false;
-	}
 	if(name in tuple) {
+		if(!module.exports.JSONDB.functions.isArray(tuple[name]) && !upsert) {
+			return false;
+		}
 		tuple[name].push(value);
 	} else {
 		if(upsert) {
@@ -1748,7 +1748,7 @@ module.exports.JSONDB.functions.generateIndexName = function(o, unique) {
  */
 module.exports.JSONDB.functions.cloneObject = function(o) {
 	var c = {};
-	if(Object.prototype.toString.call(o) == '[object Array]') {
+	if(module.exports.JSONDB.functions.isArray(o)) {
 		c = [];
 	}
 	for(var a in o) {
