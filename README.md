@@ -1,4 +1,11 @@
-# JSONDB Module
+# JSONDB is now deprecated
+
+Support for JSONDB has been discontinued by IRL Gaming.
+
+If you want to use JSONDB in Titanium applications or your web development projects head on over to the [SculeJS github repository](https://github.com/dan-eyles/sculejs).
+
+[SculeJS](https://github.com/dan-eyles/sculejs) is a complete rewrite of JSONDB including a bunch of new, interesting features as well as support 
+for use in web based and NodeJS applications.
 
 ## Description
 
